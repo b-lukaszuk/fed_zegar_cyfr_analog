@@ -120,12 +120,16 @@ function przesunXY(kat, r=rTarcza-wielkCzcionki) {
     return [Math.round(nowyX, 0), Math.round(nowyY, 0)];
 }
 
-// zwraca: Int (1-12), aktualna godzina
+// zwraca: {Int|Float} (1-12), aktualna godzina
 function zwrocGodz1do12() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
     let godz = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$1");
     if(godz > 12) {godz -= 12;}
+    // jesli minut jest wiecej niz 30 (6 w skali 1-12)
+    // to dodaj 0.5 do godzin aby wskazowka byla pomiedzy
+    // aktualna godz. a ta ktora bedzie
+    if(zwrocMin1do12() > 6){godz += 0.5;}
     return parseInt(godz);
 }
 
@@ -206,6 +210,8 @@ setInterval(function(){
     // uwaga dziala w Chromie, Firefox ma zabezpieczenie
     // i pozwala odpalac notyfikacje tylko z user evoked event handler (czy jakos tak)
     // nie zglebialem sposobu obejscia tego w FireFox-ie
+    // powyzsze dotyczy liveServer-a i local hosta
+    // bo jak lokalnie to hulaj dusza piekla nie ma
     Notification.requestPermission().then(function(){
         // console.log("Minela wlasnie " + zwrocAktCzas());
         wyswietlPowiadomienie();
