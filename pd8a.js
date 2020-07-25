@@ -188,3 +188,26 @@ function rysWskaz(czas, dlugosc, kolor="red", grubosc) {
 
 // do wyw. funkcji co jakis czas (w ms) uzywa sie setInterval()
 setInterval(rysujZegar, 1000);
+
+
+///////////////////////////////////////////////////////////////////////////////
+//                                notyfikacja                                 //
+///////////////////////////////////////////////////////////////////////////////
+
+
+function wyswietlPowiadomienie() {
+    let powiadomienie = new Notification("Minela wlasnie",
+                                         {body: zwrocAktCzas()}
+                                        );
+}
+
+// funkcje wywolujemy co minute czyli 60*1000 milisekund
+setInterval(function(){
+    // uwaga dziala w Chromie, Firefox ma zabezpieczenie
+    // i pozwala odpalac notyfikacje z user evoked event handler (czy jakos tak)
+    // nie zglebialem sposobu obejscia tego w FireFox-ie
+    Notification.requestPermission().then(function(){
+        // console.log("Minela wlasnie " + zwrocAktCzas());
+        wyswietlPowiadomienie();
+    });
+}, 60*1000);
