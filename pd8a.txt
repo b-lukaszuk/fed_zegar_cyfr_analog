@@ -1,0 +1,6 @@
+Wykonaj animowany zegar wyświetlający w elemencie canvas aktualny czas:
+zegar cyfrowy - wyświetla godzinę w formacie gg:mm:ss
+(*) zegar analogowy - z trzema wskazówkami
+zegar jest animowany i zmienia swój stan co sekundę
+(*) po ustalonym czasie (np. co minutę) wysyła powiadomienie (notyfikację systemową)
+Last modified: Saturday, 25 July 2020, 11:40 AM
