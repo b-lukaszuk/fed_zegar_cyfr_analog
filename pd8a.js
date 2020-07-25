@@ -204,7 +204,7 @@ function wyswietlPowiadomienie() {
 // funkcje wywolujemy co minute czyli 60*1000 milisekund
 setInterval(function(){
     // uwaga dziala w Chromie, Firefox ma zabezpieczenie
-    // i pozwala odpalac notyfikacje z user evoked event handler (czy jakos tak)
+    // i pozwala odpalac notyfikacje tylko z user evoked event handler (czy jakos tak)
     // nie zglebialem sposobu obejscia tego w FireFox-ie
     Notification.requestPermission().then(function(){
         // console.log("Minela wlasnie " + zwrocAktCzas());
