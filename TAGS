@@ -1,16 +1,16 @@
 
 pd8a.js,453
 function zwrocAktCzas(27,1150
-function wypiszCzas(37,1444
-function stDoRad(60,2361
-function rysujTarczeZegara(66,2492
-function liczbArabDoRzyms(102,3963
-function rysujTick(121,4560
-function rysujZegar(131,4757
-function wspPunktuNaOkregu(149,5397
-function zwrocGodz1do12(162,5943
-function zwrocMin0do60(176,6442
-function zwrocSek0do60(186,6727
-function czasDoKata(198,7131
-function rysWskaz(215,7512
-function wyswietlPowiadomienie(236,8244
+function wypiszCzas(38,1522
+function stDoRad(61,2439
+function rysujTarczeZegara(67,2570
+function liczbArabDoRzyms(103,4041
+function rysujTick(122,4638
+function rysujZegar(132,4835
+function wspPunktuNaOkregu(150,5470
+function zwrocGodz1do12(163,6016
+function zwrocMin0do60(178,6588
+function zwrocSek0do60(190,6983
+function czasDoKata(203,7467
+function rysWskaz(220,7848
+function wyswietlPowiadomienie(241,8580
