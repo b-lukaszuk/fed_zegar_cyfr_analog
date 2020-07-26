@@ -5,13 +5,16 @@ const xSrodek = 250; // wsp X dla srodka tarczy zegara (w canvas2)
 const ySrodek = 250; // wsp Y dla srodka tarczy zegara (w canvas2)
 const rTarcza = 245; // promien tarczy zegara
 const wielkCzcionki = 30;
-const rodzCzcionki = "Arial";
+const rodzCzcionkiArab = "Calibri"; // rodzaj czcionki do cyfr rzymskich
+const rodzCzcionkiRzym = "Trajan"; // rodzaj czcionki do cyfr rzymskich
 const dlWskazGodz = 100;
 const dlWskazMin = 150;
 const dlWskazSek = 200;
 const grubWskGodz = 15;
 const grubWskMin = 10;
 const grubWskSek = 5;
+const grubTicka = 3;
+const dlTicka = 10;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                               zegar cyfrowy                               //
@@ -35,7 +38,7 @@ function wypiszCzas(hhmmss=zwrocAktCzas()) {
     
     // f wywolywana co 1 sek, wiec za kazdym razem czyscimy canvas
     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-    ctx1.font = wielkCzcionki + "px " + rodzCzcionki;
+    ctx1.font = wielkCzcionki + "px " + rodzCzcionkiArab;
     ctx1.textAlign = "center";
     ctx1.textBaseline = "middle";
     /* text umieszczamy w polowie canvasa w pionie i poziomie */
@@ -76,7 +79,7 @@ function rysujTarczeZegara() {
     let xCyfra = 0; // inicjalizacja 0
     let yCyfra = 0; // inicjalizacja 0
     let katCyfra = 0; // inicjalizacja 0
-    ctx2.font = wielkCzcionki + "px " + rodzCzcionki;
+    ctx2.font = wielkCzcionki + "px " + rodzCzcionkiArab;
     ctx2.textAlign = "center";
     ctx2.textBaseline = "middle";
     // wypisujemy cyfry od 12 do 1 (counter-clock-wise)
@@ -84,19 +87,55 @@ function rysujTarczeZegara() {
         katCyfra = czasDoKata(i);
         // wypakowywanie troche w stylu pythonowskim
         [xCyfra, yCyfra] = przesunXY(katCyfra);
-        /* text umieszczamy mniej wiecej w polowie canvasa w pionie i poziomie */
-        ctx2.fillText(i, xCyfra, yCyfra);
+        /* text umieszczamy wysrodkowany w pionie i poziomie */
+        ctx2.fillText(i, xCyfra, yCyfra); // jednak lepiej wyglada z Arabskimi
+        // ctx2.fillText(liczbArabDoRzyms(i), xCyfra, yCyfra);
+        
+        // teraz dodamy jeszcze ticki
+        rysujTick(...przesunXY(czasDoKata(i), rTarcza),
+                  ...przesunXY(czasDoKata(i), rTarcza-dlTicka));
     }
 }
+
+// lArab: Int, liczba arabska (1-12)
+// zwraca: Str, liczba rzymska (wielkimi literami)
+function liczbArabDoRzyms(lArab) {
+    let lRzym = "";
+    // w zasadzie nie table tylko obiekt
+    // bedzie przyjmowac tylko cyfry z zakresu 1-12 (cyfry na tarczy)
+    // wiec nie bede kodowal wiecej 'brakpointow'
+    let lookupTable = {X: 10, IX: 9, V: 5, IV: 4, I: 1};
+    for (i in lookupTable) {
+        while(lArab >= lookupTable[i]){
+            lRzym += i;
+            lArab -= lookupTable[i];
+        }
+    }
+   return lRzym; 
+}
+
+
+// rysuje tick przy cyfrach w zegarze analogowym
+// x1, y1: Int, wspolrzedne na obwodzie zegara
+// x2, y2: Int, wspolrzedne wciecia tick-a do srodka tarczy
+function rysujTick(x1, y1, x2, y2) {
+    ctx2.beginPath() ;
+    ctx2.strokeStyle = "black";
+    ctx2.lineWidth = grubTicka;
+    ctx2.moveTo(x1, y1);
+    ctx2.lineTo(x2, y2);
+    ctx2.stroke();
+}
+
 
 function rysujZegar() {
     // rysowanie tarczy
     rysujTarczeZegara();
 
     // rysowanie wskazowek
-    rysWskaz(zwrocGodz1do12(), dlWskazGodz, "black", grubWskGodz);
-    rysWskaz(zwrocMin1do12(), dlWskazMin, "blue", grubWskMin);
-    rysWskaz(zwrocSek1do12(), dlWskazSek, "red", grubWskSek);
+    rysWskaz(zwrocGodz1do12(), dlWskazGodz, grubWskGodz, "black");
+    rysWskaz(zwrocMin0do60(), dlWskazMin, grubWskMin, "blue", false);
+    rysWskaz(zwrocSek0do60(), dlWskazSek, grubWskSek, "red", false);
 }
 
 
@@ -111,8 +150,7 @@ function przesunXY(kat, r=rTarcza-wielkCzcionki) {
     let nowyX = r * Math.sin(stDoRad(kat));
     let nowyY = r * Math.cos(stDoRad(kat));
     // tu (na stronce cytowanej wyzej) zalozenie, ze srodek ukladu jest w punkcie (0, 0)
-    // u nas jest to: (xSrodek,  ySrodek)
-    // a wiec korygujemy wspolrzedne
+    // u nas jest to: (xSrodek,  ySrodek), a wiec korygujemy wspolrzedne
     nowyX = nowyX + xSrodek;
     nowyY = ySrodek - nowyY;
 
@@ -125,67 +163,63 @@ function zwrocGodz1do12() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
     let godz = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$1");
+    godz = parseInt(godz);
     if(godz > 12) {godz -= 12;}
-    // jesli minut jest wiecej niz 30 (6 w skali 1-12)
+    // jesli minut jest wiecej niz 30
     // to dodaj 0.5 do godzin aby wskazowka byla pomiedzy
     // aktualna godz. a ta ktora bedzie
-    if(zwrocMin1do12() > 6){godz += 0.5;}
-    return parseInt(godz);
+    if(zwrocMin0do60() > 30){godz += 0.5;}
+    return godz;
 }
 
-// zwraca: Float (1-12), aktualna ilosc minut
-// minuty reprezentowane sa jako cyfra z zakresu 1-12,
-// bo tego wymaga funkcja czasdoKata()
-function zwrocMin1do12() {
+// zwraca: Float (0-60), aktualna ilosc minut
+function zwrocMin0do60() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
     let min = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$2");
     min = parseInt(min);
-    // 12 --- 60
-    // x  --- min
-    min = min * 12 / 60;
 
     return min;
 }
 
-// zwraca: Float (1-12), aktualna ilosc sekund
-// aktualne sekundy reprezentowane sa jako cyfra z zakresu 1-12,
-// bo tego wymaga funkcja czasdoKata()
-function zwrocSek1do12() {
+// zwraca: Float (0-60), aktualna ilosc sekund
+function zwrocSek0do60() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
     let sek = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$3");
     sek = parseInt(sek);
-    // 12 --- 60
-    // x  --- sek
-    sek = sek * 12 / 60;
 
     return sek;
 }
 
-// cyfra: {Int|Float} (1 do 12) oznaczajacy {godz|min|sek} 
+// cyfra: {Int|Float} (1 do 12 lub 0-60) oznaczajacy {godz|min|sek} 
 // zwraca: Float, czyli kat (deg) 0-360, 
 // a wiec kat pod jakim ta cyfra lezy na tarczy zegara
-function czasDoKata(cyfra) {
-    // 360 --- 12
-    // x   --- cyfra
+function czasDoKata(cyfra, czyGodz=true) {
     let kat = 0;
-    kat = cyfra * 360 / 12;
+    // 360 --- 12|60
+    // x   --- cyfra
+    if(czyGodz){
+        kat = cyfra * 360 / 12;
+    } else {
+        kat = cyfra * 360 / 60;
+    }
 
     return kat;
 }
 
-// czas: {Int|Float} od 1 do 12
+// czas: {Int|Float} od 1 do 12 lub od 0 do 60
 // dlugosc: Int, dlugosc wskazowki w px
 // kolor: Str, kolor wskazowki
 // grubosc: Int, grubosc linii wskazowki
-function rysWskaz(czas, dlugosc, kolor="red", grubosc) {
+function rysWskaz(czas, dlugosc, grubosc, kolor="red", czyGodz=true) {
     ctx2.beginPath();
     ctx2.strokeStyle = kolor;
     ctx2.lineWidth = grubosc;
+    ctx2.lineCap = "round";
     ctx2.moveTo(xSrodek, ySrodek);
     // pozycja konca wskazowki [Int, Int]
-    let konWskazowki = przesunXY(czasDoKata(czas), dlugosc);
+    let konWskazowki = przesunXY(czasDoKata(czas, czyGodz), dlugosc);
     ctx2.lineTo(...konWskazowki);
     ctx2.stroke();
 }
