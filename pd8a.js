@@ -86,14 +86,14 @@ function rysujTarczeZegara() {
     for (let i = 12; i > 0; i--) {
         katCyfra = czasDoKata(i);
         // wypakowywanie troche w stylu pythonowskim
-        [xCyfra, yCyfra] = przesunXY(katCyfra);
+        [xCyfra, yCyfra] = wspPunktuNaOkregu(katCyfra);
         /* text umieszczamy wysrodkowany w pionie i poziomie */
         ctx2.fillText(i, xCyfra, yCyfra); // jednak lepiej wyglada z Arabskimi
         // ctx2.fillText(liczbArabDoRzyms(i), xCyfra, yCyfra);
         
         // teraz dodamy jeszcze ticki
-        rysujTick(...przesunXY(czasDoKata(i), rTarcza),
-                  ...przesunXY(czasDoKata(i), rTarcza-dlTicka));
+        rysujTick(...wspPunktuNaOkregu(czasDoKata(i), rTarcza),
+                  ...wspPunktuNaOkregu(czasDoKata(i), rTarcza-dlTicka));
     }
 }
 
@@ -139,14 +139,14 @@ function rysujZegar() {
 }
 
 
-// przesuwa wsp XY na tarczy obwodzie zegara o dany kat
-// a konkretnie zwraca przesuniete wspolrzedne XY
+// zwraca wspolrzedne dla danego kata (12 to 0|360 deg idzie clockwise) 
+// punktu na okregu o danej srednicy
+// za:
+// https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
 // kat: Float (0-360) w stopniach
 // r: Float, promien okregu
 // zwraca [Int, Int], nowe wsp XY dla punktu na okregu
-function przesunXY(kat, r=rTarcza-wielkCzcionki) {
-    // za:
-    // https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
+function wspPunktuNaOkregu(kat, r=rTarcza-wielkCzcionki) {
     let nowyX = r * Math.sin(stDoRad(kat));
     let nowyY = r * Math.cos(stDoRad(kat));
     // tu (na stronce cytowanej wyzej) zalozenie, ze srodek ukladu jest w punkcie (0, 0)
@@ -219,7 +219,7 @@ function rysWskaz(czas, dlugosc, grubosc, kolor="red", czyGodz=true) {
     ctx2.lineCap = "round";
     ctx2.moveTo(xSrodek, ySrodek);
     // pozycja konca wskazowki [Int, Int]
-    let konWskazowki = przesunXY(czasDoKata(czas, czyGodz), dlugosc);
+    let konWskazowki = wspPunktuNaOkregu(czasDoKata(czas, czyGodz), dlugosc);
     ctx2.lineTo(...konWskazowki);
     ctx2.stroke();
 }
