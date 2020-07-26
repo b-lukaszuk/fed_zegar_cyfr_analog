@@ -145,7 +145,7 @@ function rysujZegar() {
 // https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
 // kat: Float (0-360) w stopniach
 // r: Float, promien okregu
-// zwraca [Int, Int], nowe wsp XY dla punktu na okregu
+// zwraca [Int, Int], wsp XY dla punktu na okregu
 function wspPunktuNaOkregu(kat, r=rTarcza-wielkCzcionki) {
     let nowyX = r * Math.sin(stDoRad(kat));
     let nowyY = r * Math.cos(stDoRad(kat));
@@ -165,10 +165,10 @@ function zwrocGodz1do12() {
     let godz = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$1");
     godz = parseInt(godz);
     if(godz > 12) {godz -= 12;}
-    // jesli minut jest wiecej niz 30
-    // to dodaj 0.5 do godzin aby wskazowka byla pomiedzy
+    // jesli minut jest wiecej niz 0
+    // to dodaj floata 1/60 do godzin aby wskazowka byla pomiedzy
     // aktualna godz. a ta ktora bedzie
-    if(zwrocMin0do60() > 30){godz += 0.5;}
+    godz += zwrocMin0do60()/60;
     return godz;
 }
 
@@ -178,6 +178,7 @@ function zwrocMin0do60() {
     // prosty regex przetestowany w: https://regex101.com/
     let min = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$2");
     min = parseInt(min);
+    min += zwrocSek0do60()/60;
 
     return min;
 }
@@ -241,11 +242,6 @@ function wyswietlPowiadomienie() {
 
 // funkcje wywolujemy co minute czyli 60*1000 milisekund
 setInterval(function(){
-    // uwaga dziala w Chromie, Firefox ma zabezpieczenie
-    // i pozwala odpalac notyfikacje tylko z user evoked event handler (czy jakos tak)
-    // nie zglebialem sposobu obejscia tego w FireFox-ie
-    // powyzsze dotyczy liveServer-a i local hosta
-    // bo jak lokalnie to hulaj dusza piekla nie ma
     Notification.requestPermission().then(function(){
         // console.log("Minela wlasnie " + zwrocAktCzas());
         wyswietlPowiadomienie();
