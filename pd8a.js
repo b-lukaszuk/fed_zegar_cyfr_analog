@@ -26,7 +26,8 @@ let ctx1 = canvas1.getContext("2d");
 // zwraca aktualny czas => Str ("HH:MM:SS")
 function zwrocAktCzas() {
     let x = new Date();
-    x = x.toTimeString();
+    // tu mozna bylo godz wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
+    x = x.toTimeString(); 
     // miedzy slashami regex, usuwa wszystko po 1 spacji
     // prosty regex przetestowany w: https://regex101.com/
     return x.replace(/ .*/, "");
@@ -162,6 +163,7 @@ function wspPunktuNaOkregu(kat, r=rTarcza-wielkCzcionki) {
 function zwrocGodz1do12() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
+    // tu mozna bylo godz wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
     let godz = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$1");
     godz = parseInt(godz);
     if(godz > 12) {godz -= 12;}
@@ -176,6 +178,7 @@ function zwrocGodz1do12() {
 function zwrocMin0do60() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
+    // tu mozna bylo minuty wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
     let min = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$2");
     min = parseInt(min);
     min += zwrocSek0do60()/60;
@@ -187,6 +190,7 @@ function zwrocMin0do60() {
 function zwrocSek0do60() {
     let strCzas = zwrocAktCzas();
     // prosty regex przetestowany w: https://regex101.com/
+    // tu mozna bylo sekundy wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
     let sek = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$3");
     sek = parseInt(sek);
 
