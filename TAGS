@@ -1,16 +1,23 @@
 
-pd8a.js,453
-function zwrocAktCzas(27,1150
-function wypiszCzas(38,1522
-function stDoRad(61,2439
-function rysujTarczeZegara(67,2570
-function liczbArabDoRzyms(103,4041
-function rysujTick(122,4638
-function rysujZegar(132,4835
-function wspPunktuNaOkregu(150,5470
-function zwrocGodz1do12(163,6016
-function zwrocMin0do60(178,6588
-function zwrocSek0do60(190,6983
-function czasDoKata(203,7467
-function rysWskaz(220,7848
-function wyswietlPowiadomienie(241,8580
+/home/czesio/Desktop/fed_2019_2020/semestr2/java_script/zjazd_25_07_2020/praca_domowa/pd8a.html,0
+
+/home/czesio/Desktop/fed_2019_2020/semestr2/java_script/zjazd_25_07_2020/praca_domowa/pd8a.js,1170
+function zwrocAktCzas() {zwrocAktCzas27,1150
+function wypiszCzas(hhmmss=zwrocAktCzas()) {wypiszCzas33,1289
+function stDoRad(stopnie) {stDoRad56,2206
+function rysujTarczeZegara() {rysujTarczeZegara62,2337
+    let lookupTable = {X: 10, IX: 9, V: 5, IV: 4, I: 1};X103,4024
+    let lookupTable = {X: 10, IX: 9, V: 5, IV: 4, I: 1};IX103,4024
+    let lookupTable = {X: 10, IX: 9, V: 5, IV: 4, I: 1};V103,4024
+    let lookupTable = {X: 10, IX: 9, V: 5, IV: 4, I: 1};IV103,4024
+    let lookupTable = {X: 10, IX: 9, V: 5, IV: 4, I: 1};I103,4024
+function liczbArabDoRzyms(lArab) {liczbArabDoRzyms98,3808
+function rysujTick(x1, y1, x2, y2) {rysujTick117,4405
+function rysujZegar() {rysujZegar127,4602
+function wspPunktuNaOkregu(kat, r=rTarcza-wielkCzcionki) {wspPunktuNaOkregu145,5237
+function zwrocGodz1do12() {zwrocGodz1do12158,5783
+function zwrocMin0do60() {zwrocMin0do60169,6122
+function zwrocSek0do60() {zwrocSek0do60180,6430
+function czasDoKata(cyfra, czyGodz=true) {czasDoKata189,6682
+function rysWskaz(czas, dlugosc, grubosc, kolor="red", czyGodz=true) {rysWskaz206,7063
+function wyswietlPowiadomienie() {wyswietlPowiadomienie227,7795

@@ -25,12 +25,7 @@ let ctx1 = canvas1.getContext("2d");
 
 // zwraca aktualny czas => Str ("HH:MM:SS")
 function zwrocAktCzas() {
-    let x = new Date();
-    // tu mozna bylo godz wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
-    x = x.toTimeString(); 
-    // miedzy slashami regex, usuwa wszystko po 1 spacji
-    // prosty regex przetestowany w: https://regex101.com/
-    return x.replace(/ .*/, "");
+    return new Date().toLocaleTimeString();
 }
 
 // wypisuje aktualny czas do canvasa1
@@ -161,11 +156,7 @@ function wspPunktuNaOkregu(kat, r=rTarcza-wielkCzcionki) {
 
 // zwraca: {Int|Float} (1-12), aktualna godzina
 function zwrocGodz1do12() {
-    let strCzas = zwrocAktCzas();
-    // prosty regex przetestowany w: https://regex101.com/
-    // tu mozna bylo godz wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
-    let godz = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$1");
-    godz = parseInt(godz);
+    let godz = new Date().getHours();
     if(godz > 12) {godz -= 12;}
     // jesli minut jest wiecej niz 0
     // to dodaj floata 1/60 do godzin aby wskazowka byla pomiedzy
@@ -174,25 +165,20 @@ function zwrocGodz1do12() {
     return godz;
 }
 
-// zwraca: Float (0-60), aktualna ilosc minut
+// zwraca: {Int|Float} (0-60), aktualna ilosc minut
 function zwrocMin0do60() {
-    let strCzas = zwrocAktCzas();
-    // prosty regex przetestowany w: https://regex101.com/
-    // tu mozna bylo minuty wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
-    let min = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$2");
-    min = parseInt(min);
+    let min = new Date().getMinutes();
+    // jesli sekund jest wiecej niz 0
+    // to dodaj floata 1/60 do minut aby wskazowka byla pomiedzy
+    // aktualna minuta a ta ktora bedzie
     min += zwrocSek0do60()/60;
 
     return min;
 }
 
-// zwraca: Float (0-60), aktualna ilosc sekund
+// zwraca: Int (0-60), aktualna ilosc sekund
 function zwrocSek0do60() {
-    let strCzas = zwrocAktCzas();
-    // prosty regex przetestowany w: https://regex101.com/
-    // tu mozna bylo sekundy wziac tylko wbudowanymi funkcjami (dr M. Tabedzki)
-    let sek = strCzas.replace(/([0-9]{2}):([0-9]{2}):([0-9]{2})/, "$3");
-    sek = parseInt(sek);
+    let sek = new Date().getSeconds();
 
     return sek;
 }
