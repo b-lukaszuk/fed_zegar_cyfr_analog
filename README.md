@@ -1,5 +1,7 @@
 # Zegar analogowy i cyfrowy
 
+**Deployed version ->** [Here](https://b-lukaszuk.github.io/deployedProjects/clockDigiAnalog/clock.html)
+
 Podyplomowka PB Front-End Development 2019/2020
 
 Praca domowa z JS-a (z canvasa)
@@ -13,8 +15,6 @@ zegar cyfrowy - wyświetla godzinę w formacie gg:mm:ss
 zegar jest animowany i zmienia swój stan co sekundę
 
 (*) po ustalonym czasie (np. co minutę) wysyła powiadomienie (notyfikację systemową)
-
-**Deployed version ->** [Here](https://b-lukaszuk.github.io/deployed_projects/clockDigiAnalog/clock.html)
 
 Z wersji online usunieto notyfikację
 
